@@ -1,4 +1,5 @@
 import sys
+import bisect
 
 #read file
 with open(sys.argv[1]) as nodeFile:
@@ -24,21 +25,32 @@ print(graph)
 print(str(graph).replace(']],', ']]\n'))
 
 #Beginning of solver
-solved = False
-stack = []
-currentPath = [1]
-highest = 0
-currentNode = 1
-navigated = true
-#traverse graph
-while !solved:
-    if !navigated:
+path = [1]
+#index is city number -1, format should be [[unnavigated path], highest at time]
+unfollowedPaths = [[] for _ in range(cityCount)]
 
-    navigated = false
-    stack.append(graph[currentNode]) #add current node's paths to stack
-    for index, path in enumerate(stack[len(currentPath)-1]):
-        #if the node the target points at only poits at the node we're leaving, or it's already been visited, we just don't for now
-        if len(graph[path[0]]) == 1 or path[1] in currentPath:
-            stack[len(currentPath)-1].pop(index)
-        #TODO we need to figure out how to actually navigate the tree and double back if needed
-        elif highest
+depth = 0
+currentNode = 1
+highest = 0
+
+while True:
+    nextSteps = graph[currentNode]
+    nextNode = None
+    unfollowedPaths[]
+    for step in nextSteps:
+        #if the next step is a dead end or if we've already been there we don't navigate
+        if len(graph[step[0]]) == 1 or step[0] in path:
+            print("No")
+        elif path[1] < highest:
+            nextNode = step[0]
+            newPath = path
+            newPath.append(nextNode)
+        else:
+            unfollowedPaths[currentNode-1].append([step, highest])
+
+    if nextNode == None:
+        if depth > 0
+            depth = depth-1
+            path.pop()
+
+#bisect.insort_left
