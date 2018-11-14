@@ -3,7 +3,11 @@ import sys
 class sTree(object):
     """tree for finding the lowest max weight path"""
     def __init__(self, node=1, children=None):
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> e755d763bf4d1cb42b34bf14a4bcc20be2ee32ae
 
 
 #prune graph of nodes with only one route
@@ -39,4 +43,8 @@ for row in fileRows[1:roadCount+1]:
 print(graph)
 print(str(graph).replace(']],', ']]\n'))
 
+<<<<<<< HEAD
 pruneDeadEnds(graph, targetCity)
+=======
+pruneDeadEnds(graph)
+>>>>>>> 57ddcd438857719c826dbaea3b4f48e287532810
