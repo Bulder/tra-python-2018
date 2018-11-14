@@ -1,6 +1,15 @@
 import sys
 import bisect
 
+#prune graph of nodes with only one route
+def pruneDeadEnds(graph):
+    for key in graph:
+        print(key)
+        for path in graph[key]:
+            if len(graph[path[0]]) < 2:
+                print(key, graph[path[0]])
+
+
 #read file
 with open(sys.argv[1]) as nodeFile:
     fileContent = nodeFile.read()
@@ -24,37 +33,8 @@ for row in fileRows[1:roadCount+1]:
 print(graph)
 print(str(graph).replace(']],', ']]\n'))
 
+pruneDeadEnds(graph)
+
+
+
 #Beginning of solver
-path = [1]
-#index is city number -1, format should be [[unnavigated path], highest at time]
-unfollowedPaths = [[] for _ in range(cityCount)]
-
-depth = 0
-currentNode = 1
-highest = 0
-lowestPotential = None
-while True:
-    nextSteps = graph[currentNode]
-    nextNode = None
-    unfollowedPaths[]
-    for step in nextSteps:
-        #if the next step is a dead end or if we've already been there we don't navigate
-        if len(graph[step[0]]) == 1 or step[0] in path:
-            print("No")
-        #if the next step is lower than the highest then sure let's go for it
-        elif path[1] < highest:
-            nextNode = step[0]
-            newPath = path
-            newPath.append(nextNode)
-        else:
-            unfollowedPaths[currentNode-1].append([step, highest])
-            if step[1] <
-            lowestPotential = [currentNode, step]
-
-    if nextNode == None:
-        if depth > 0:
-            depth = depth-1
-            path.pop()
-
-
-#bisect.insort_left
