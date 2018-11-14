@@ -1,11 +1,5 @@
 import sys
 
-class sTree(object):
-    """tree for finding the lowest max weight path"""
-    def __init__(self, node=1, children=None):
-
-
-
 #prune graph of nodes with only one route
 def pruneDeadEnds(graph, target):
     for key in graph:
