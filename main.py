@@ -1,13 +1,19 @@
 import sys
-import bisect
+
+class sTree(object):
+    """tree for finding the lowest max weight path"""
+    def __init__(self, node=1, children=None):
+
+
 
 #prune graph of nodes with only one route
-def pruneDeadEnds(graph):
+def pruneDeadEnds(graph, target):
     for key in graph:
-        print(key)
-        for path in graph[key]:
-            if len(graph[path[0]]) < 2:
-                print(key, graph[path[0]])
+        if len(graph[key]) < 2 and key != target:
+            #remove paths to the node too
+
+            del graph[key]
+            print("key %d removed as dead end" % key)
 
 
 #read file
@@ -18,7 +24,7 @@ with open(sys.argv[1]) as nodeFile:
 fileRows = fileContent.split('\n')
 #they're surprise tools that will help us later
 cityCount, roadCount = map(int, fileRows[0].split(' '))
-targetCity = fileRows[len(fileRows)-2] #the file ends with an empty row so skip past that
+targetCity = int(fileRows[len(fileRows)-2]) #the file ends with an empty row so skip past that
 #build graph object
 graph = {}
 for i in range(cityCount):
@@ -33,8 +39,4 @@ for row in fileRows[1:roadCount+1]:
 print(graph)
 print(str(graph).replace(']],', ']]\n'))
 
-pruneDeadEnds(graph)
-
-
-
-#Beginning of solver
+pruneDeadEnds(graph, targetCity)
