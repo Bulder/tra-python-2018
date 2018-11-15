@@ -55,7 +55,7 @@ while currentNode != targetCity:
 
     #if one of the next steps is shorter or equal to the current highest
     shortestStep = min(nextSteps, key=lambda x: x[1])
-    while shortestStep[0] == previousPath[-1] or shortestStep[0] == previousNode:
+    if shortestStep[0] == previousNode: #or shortestStep[0] == previousPath[-1]
         print(nextSteps)
         nextSteps.remove(shortestStep)
         shortestStep = min(nextSteps, key=lambda x: x[1])
