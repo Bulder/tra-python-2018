@@ -1,16 +1,7 @@
 import sys
 import copy
 import time
-
-#prune graph of nodes with only one route
-def pruneDeadEnds(graph, target):
-    for key in graph:
-        if len(graph[key]) < 2 and key != target:
-            #remove paths to the node too
-
-            del graph[key]
-            print("key %d removed as dead end" % key)
-
+import math
 
 #read file
 with open(sys.argv[1]) as nodeFile:
@@ -32,60 +23,35 @@ for row in fileRows[1:roadCount+1]:
     graph[rFrom].append([rTo, rHeight, rFrom])
     graph[rTo].append([rFrom, rHeight, rTo])
 
-print(graph)
+#print(graph)
 #print(str(graph).replace(']],', ']]\n'))
 
-absolutePath = [1]
-path = [[1], 0]
-previousPath = [-1]
-availableSteps = []
-previousNode = None
-currentNode = 1
-backtrack = []
+lowest = [math.inf] * cityCount
+previous = [None] * cityCount
+unvisited = graph.copy()
 
-while currentNode != targetCity:
-    shortestStep = None
+index = 1
 
-    nextSteps = graph[currentNode].copy()
+while len(unvisited) != 0:
+    node = unvisited.pop(index)
+    print(index)
+    for path in node:
+        if path[1] < lowest[path[0]-1]:
+            lowest[path[0]-1] = path[1]
+            previous[index-1] = path[0]
 
-    #remove new steps going into dead ends or visited nodes
-    for step in nextSteps:
-        if len(graph[step[0]]) <= 1 or step[0] in path[0] or step[0] == previousNode:
-            nextSteps.remove(step)
-
-    #if one of the next steps is shorter or equal to the current highest
-    shortestStep = min(nextSteps, key=lambda x: x[1])
-    if shortestStep[0] == previousNode: #or shortestStep[0] == previousPath[-1]
-        print(nextSteps)
-        nextSteps.remove(shortestStep)
-        shortestStep = min(nextSteps, key=lambda x: x[1])
-
-    for step in nextSteps:
-        if step in availableSteps:
-            continue
-        availableSteps += nextSteps
+    index = None
+    minimum = math.inf
+    i = 0
+    while i < cityCount:
+        if i+1 in unvisited and lowest[i] < minimum:
+            index = i+1
+        i += 1
+traceBackCursor = targetCity-1
+path = []
+print(unvisited)
+print(previous)
+print(lowest)
 
 
-    if shortestStep[1] <= path[1]:
-        backtrack = []
-        availableSteps.remove(shortestStep)
-        path[0].append(shortestStep[0])
-        print("hop %d" % shortestStep[0])
-    else:
-        #pick the second best
-        shortestStep = availableSteps.pop(availableSteps.index(min(availableSteps, key=lambda x: x[1])))
-        print(previousNode, currentNode, shortestStep)
-        currentNode = shortestStep[0]
-        previousPath = path[0]
-        path[0] = path[0][:path[0].index(shortestStep[2])+1]
-        path[0].append(shortestStep[0])
-        path[1] = shortestStep[1]
-        print("hop back to %d then hop to %d" % (shortestStep[2], shortestStep[0]))
-
-    previousNode = currentNode
-    currentNode = shortestStep[0]
-    absolutePath.append(currentNode)
-    print(path[0])
-    print(absolutePath, "\n")
-    time.sleep(0.5)
 print(path)
