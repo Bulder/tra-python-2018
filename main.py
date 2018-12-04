@@ -36,19 +36,22 @@ while len(unvisited) != 0:
     node = unvisited.pop(index)
     print(index)
     for path in node:
-        if path[1] < lowest[path[0]-1]:
+        print(path, path[1] < lowest[path[0]-1], lowest[path[2]-1] != index)
+        if path[1] < lowest[path[0]-1] and lowest[path[2]-1] != index:
             lowest[path[0]-1] = path[1]
             previous[index-1] = path[0]
-
     index = None
     minimum = math.inf
     i = 0
     while i < cityCount:
         if i+1 in unvisited and lowest[i] < minimum:
+            minimum = lowest[i]
             index = i+1
         i += 1
-traceBackCursor = targetCity-1
-path = []
+    print("Going to", index)
+    if index == targetCity:
+        print(previous)
+
 print(unvisited)
 print(previous)
 print(lowest)
