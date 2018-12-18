@@ -29,7 +29,7 @@ for row in fileRows[1:roadCount+1]:
 lowest = [math.inf] * cityCount
 previous = [None] * cityCount
 unvisited = graph.copy()
-
+order = [1]
 index = 1
 
 while len(unvisited) != 0:
@@ -49,8 +49,7 @@ while len(unvisited) != 0:
             index = i+1
         i += 1
     print("Going to", index)
-    if index == targetCity:
-        print(previous)
+    order.append(index)
 
 print(unvisited)
 print(previous)
