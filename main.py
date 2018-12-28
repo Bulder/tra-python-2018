@@ -13,47 +13,42 @@ fileRows = fileContent.split('\n')
 cityCount, roadCount = map(int, fileRows[0].split(' '))
 targetCity = int(fileRows[len(fileRows)-2]) #the file ends with an empty row so skip past that
 #build graph object
-graph = {}
+graph = []
+
+cities = []
+
 for i in range(cityCount):
-    graph[i+1] = []
+    cities.append([i+1])
+
 
 for row in fileRows[1:roadCount+1]:
     rFrom, rTo, rHeight = map(int, row.split(' '))
-    #add all roads leading out of nodes and setting them to untraversed
-    graph[rFrom].append([rTo, rHeight, rFrom])
-    graph[rTo].append([rFrom, rHeight, rTo])
+    graph.append([rHeight, rFrom, rTo])
 
-#print(graph)
-#print(str(graph).replace(']],', ']]\n'))
+graph.sort(key=lambda x: x[0], reverse=True)
 
-lowest = [math.inf] * cityCount
-previous = [None] * cityCount
-unvisited = graph.copy()
-order = [1]
-index = 1
+print(graph)
 
-while len(unvisited) != 0:
-    node = unvisited.pop(index)
-    print(index)
-    for path in node:
-        print(path, path[1] < lowest[path[0]-1], lowest[path[2]-1] != index)
-        if path[1] < lowest[path[0]-1] and lowest[path[2]-1] != index:
-            lowest[path[0]-1] = path[1]
-            previous[index-1] = path[0]
-    index = None
-    minimum = math.inf
-    i = 0
-    while i < cityCount:
-        if i+1 in unvisited and lowest[i] < minimum:
-            minimum = lowest[i]
-            index = i+1
-        i += 1
-    print("Going to", index)
-    order.append(index)
+#build minimum spanning tree
+edges = []
+while len(edges) < cityCount-1:
+    edge = graph.pop()
+    groupA, groupB = [], []
+    groupAindex, groupBindex = -1, -1
+    for index, group in enumerate(cities):
+        if edge[1] in group:
+            groupAindex = index
+            groupA = group
+        if edge[2] in group:
+            groupBindex = index
+            groupB = group
+    if groupAindex == groupBindex:
+        continue
+    print(groupAindex, groupBindex)
+    groupA += cities.pop(groupBindex)
+    print(groupA)
 
-print(unvisited)
-print(previous)
-print(lowest)
+    print(cities)
+    edges.append(edge)
 
-
-print(path)
+print(edges, cities)
