@@ -27,8 +27,6 @@ for row in fileRows[1:roadCount+1]:
 
 graph.sort(key=lambda x: x[0], reverse=True)
 
-print(graph)
-
 #build minimum spanning tree
 edges = []
 while len(edges) < cityCount-1:
@@ -44,11 +42,42 @@ while len(edges) < cityCount-1:
             groupB = group
     if groupAindex == groupBindex:
         continue
-    print(groupAindex, groupBindex)
     groupA += cities.pop(groupBindex)
-    print(groupA)
-
-    print(cities)
     edges.append(edge)
+#could it be faster if we stopped when 1 and targetCity are both in the same list
 
-print(edges, cities)
+
+#rebuild graph with spanning tree and create an empty height list
+graph = {}
+highests = []
+for i in range(cityCount):
+    graph[i+1] = []
+    highests.append(0)
+for edge in edges:
+    graph[edge[1]].append([edge[0], edge[2]])
+    graph[edge[2]].append([edge[0], edge[1]])
+
+path = [1]
+currentNode = 1
+previousNode = 0
+highest = 0
+
+while targetCity not in path:
+    if len(graph[currentNode]) > 0:
+        step = graph[currentNode].pop(-1)
+        if step[1] == previousNode:
+            continue
+        path.append(step[1])
+        if step[0] > highest:
+            highest = step[0]
+        previousNode = currentNode
+        currentNode = path[-1]
+        highests[currentNode-1] = highest
+
+    else:
+        path.pop(-1)
+        currentNode = path[-1]
+        highest = highests[currentNode-1]
+
+
+print(path, highest)
