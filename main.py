@@ -12,20 +12,19 @@ fileRows = fileContent.split('\n')
 #they're surprise tools that will help us later
 cityCount, roadCount = map(int, fileRows[0].split(' '))
 targetCity = int(fileRows[len(fileRows)-2]) #the file ends with an empty row so skip past that
-#build graph object
+
+#build graph object that can be parsed for minimum spanning tree
 graph = []
-
-cities = []
-
-for i in range(cityCount):
-    cities.append([i+1])
-
-
 for row in fileRows[1:roadCount+1]:
     rFrom, rTo, rHeight = map(int, row.split(' '))
     graph.append([rHeight, rFrom, rTo])
 
 graph.sort(key=lambda x: x[0], reverse=True)
+
+#
+cities = []
+for i in range(cityCount):
+    cities.append([i+1])
 
 #build minimum spanning tree
 edges = []
@@ -44,8 +43,6 @@ while len(edges) < cityCount-1:
         continue
     groupA += cities.pop(groupBindex)
     edges.append(edge)
-#could it be faster if we stopped when 1 and targetCity are both in the same list
-
 
 #rebuild graph with spanning tree and create an empty height list
 graph = {}
@@ -57,11 +54,13 @@ for edge in edges:
     graph[edge[1]].append([edge[0], edge[2]])
     graph[edge[2]].append([edge[0], edge[1]])
 
+
 path = [1]
 currentNode = 1
 previousNode = 0
 highest = 0
 
+#build path
 while targetCity not in path:
     if len(graph[currentNode]) > 0:
         step = graph[currentNode].pop(-1)
