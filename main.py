@@ -64,7 +64,7 @@ highest = 0
 while targetCity not in path:
     if len(graph[currentNode]) > 0:
         step = graph[currentNode].pop(-1)
-        if step[1] == previousNode:
+        if step[1] in path:
             continue
         path.append(step[1])
         if step[0] > highest:
@@ -72,7 +72,6 @@ while targetCity not in path:
         previousNode = currentNode
         currentNode = path[-1]
         highests[currentNode-1] = highest
-
     else:
         path.pop(-1)
         currentNode = path[-1]
